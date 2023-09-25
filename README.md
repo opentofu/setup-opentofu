@@ -1,1 +1,1 @@
-# opentofu-setup
+# setup-opentofu WIP repo
