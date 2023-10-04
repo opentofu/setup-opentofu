@@ -1,0 +1,36 @@
+name: 'OpenTofu - Setup Tofu'
+description: 'Sets up OpenTofu CLI in your GitHub Actions workflow.'
+author: 'OpenTofu'
+inputs:
+  cli_config_credentials_hostname:
+    description: 'The hostname of a Terraform Cloud/Enterprise instance to place within the credentials block of the OpenTofu CLI configuration file. Defaults to `app.terraform.io`.'
+    default: 'app.terraform.io'
+    required: false
+  cli_config_credentials_token:
+    description: 'The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the OpenTofu CLI configuration file.'
+    required: false
+  tofu_version:
+    description: 'The version of OpenTofu CLI to install. If no version is given, it will default to `latest`. Note! The CLI is built from source until the first OpenTofu official release.'
+    default: 'latest'
+    required: false
+  tofu_wrapper:
+    description: 'Whether or not to install a wrapper to wrap subsequent calls of the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
+    default: 'true'
+    required: false
+outputs:
+  stdout:
+    description: 'The STDOUT stream of the call to the `tofu` binary.'
+    value: ''
+  stderr:
+    description: 'The STDERR stream of the call to the `tofu` binary.'
+    value: 'Wrapper was not activated'
+  exitcode:
+    description: 'The exit code of the call to the `tofu` binary.'
+    value: '126'
+
+branding:
+  icon: 'terminal'
+  color: 'purple'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
