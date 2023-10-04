@@ -1,0 +1,316 @@
+name: 'Setup OpenTofu'
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+  # TODO: remove after manual tests
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  tofu-versions:
+    name: 'OpenTofu Versions'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # TODO: add move versions to test when the feature is added
+        tofu-versions: [latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu - ${{ matrix['tofu-versions'] }}
+      uses: ./
+      with:
+        tofu_version: ${{ matrix['tofu-versions'] }}
+
+    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+      if: ${{ matrix['tofu-versions'] != 'latest' }}
+      run: tofu version | grep ${{ matrix['tofu-versions']}}
+
+    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+      if: ${{ matrix['tofu-versions'] == 'latest' }}
+      run: tofu version | grep 'OpenTofu v'
+
+  tofu-versions-no-wrapper:
+    name: 'OpenTofu Versions No Wrapper'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # TODO: add more versions to test when the semver feature is implemented
+        tofu-versions: [latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu (no wrapper) - ${{ matrix['tofu-versions'] }}
+      uses: ./
+      with:
+        tofu_version: ${{ matrix['tofu-versions'] }}
+        tofu_wrapper: false
+
+    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+      if: ${{ matrix['tofu-versions'] != 'latest' }}
+      run: tofu version | grep ${{ matrix['tofu-versions']}}
+
+    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+      if: ${{ matrix['tofu-versions'] == 'latest' }}
+      run: tofu version | grep 'OpenTofu v'
+
+# TODO: uncomment when the semver feature is implemented
+#  tofu-versions-constraints:
+#    name: 'OpenTofu Versions Constraints'
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest, windows-latest, macos-latest]
+#        tofu-versions: [~0.12, 0.12.x, <0.13.0]
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+#
+#    - name: Setup OpenTofu - ${{ matrix['tofu-versions'] }}
+#      uses: ./
+#      with:
+#        tofu_version: ${{ matrix['tofu-versions'] }}
+#
+#    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+#      run: tofu version | grep 'OpenTofu v0\.12'
+
+# TODO: uncomment when the semver feature is implemented
+#  tofu-versions-constraints-no-wrapper:
+#    name: 'OpenTofu Versions Constraints No Wrapper'
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest, windows-latest, macos-latest]
+#        tofu-versions: [~0.12, 0.12.x, <0.13.0]
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+#
+#    - name: Setup OpenTofu (no wrapper) - ${{ matrix['tofu-versions'] }}
+#      uses: ./
+#      with:
+#        tofu_version: ${{ matrix['tofu-versions'] }}
+#        tofu_wrapper: false
+#
+#    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+#      run: tofu version | grep 'OpenTofu v0\.12'
+
+  tofu-credentials-cloud:
+    name: 'OpenTofu Cloud Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    env:
+      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+      with:
+        cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
+
+    - name: Validate OpenTofu Credentials (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cat ${APPDATA}/terraform.rc | grep 'credentials "app.terraform.io"'
+        cat ${APPDATA}/terraform.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+    - name: Validate Teraform Credentials (Linux & macOS)
+      if: runner.os != 'Windows'
+      run: |
+        cat ${HOME}/.terraformrc | grep 'credentials "app.terraform.io"'
+        cat ${HOME}/.terraformrc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+  tofu-credentials-enterprise:
+    name: 'OpenTofu Enterprise Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    env:
+      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+      with:
+        cli_config_credentials_hostname: 'tofu.example.com'
+        cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
+
+    - name: Validate OpenTofu Credentials (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cat ${APPDATA}/terraform.rc | grep 'credentials "tofu.example.com"'
+        cat ${APPDATA}/terraform.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+    - name: Validate Teraform Credentials (Linux & macOS)
+      if: runner.os != 'Windows'
+      run: |
+        cat ${HOME}/.terraformrc | grep 'credentials "tofu.example.com"'
+        cat ${HOME}/.terraformrc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+  tofu-credentials-none:
+    name: 'OpenTofu No Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+
+    - name: Validate OpenTofu Credentials (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        [[ -f ${APPDATA}/terraform.rc ]] || exit 0
+
+    - name: Validate Teraform Credentials (Linux & macOS)
+      if: runner.os != 'Windows'
+      run: |
+        [[ -f ${HOME}/.terraformrc ]] || exit 0
+
+  tofu-arguments:
+    name: 'OpenTofu Arguments'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+
+    - name: Check No Arguments
+      run: tofu || exit 0
+
+    - name: Check Single Argument
+      run: tofu help || exit 0
+
+    - name: Check Single Argument Hyphen
+      run: tofu -help
+
+    - name: Check Single Argument Double Hyphen
+      run: tofu --help
+
+    - name: Check Single Argument Subcommand
+      run: tofu fmt -check
+
+    - name: Check Multiple Arguments Subcommand
+      run: tofu fmt -check -list=true -no-color
+
+  tofu-arguments-no-wrapper:
+    name: 'OpenTofu Arguments No Wrapper'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+      with:
+        tofu_wrapper: false
+
+    - name: Check No Arguments
+      run: tofu || exit 0
+
+    - name: Check Single Argument
+      run: tofu help || exit 0
+
+    - name: Check Single Argument Hyphen
+      run: tofu -help
+
+    - name: Check Single Argument Double Hyphen
+      run: tofu --help
+
+    - name: Check Single Argument Subcommand
+      run: tofu fmt -check
+
+    - name: Check Multiple Arguments Subcommand
+      run: tofu fmt -check -list=true -no-color
+
+  tofu-run-local:
+    name: 'OpenTofu Run Local'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        working-directory: ./.github/workflows/data/local
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+
+    - name: OpenTofu Init
+      shell: bash
+      run: tofu init
+
+    - name: OpenTofu Format
+      shell: bash
+      run: tofu fmt -check
+
+    - name: OpenTofu Plan
+      id: plan
+      shell: bash
+      run: tofu plan
+
+    - name: Print OpenTofu Plan
+      shell: bash
+      run: echo "${{ steps.plan.outputs.stdout }}"
+
+  tofu-run-local-no-wrapper:
+    name: 'OpenTofu Run Local No Wrapper'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        working-directory: ./.github/workflows/data/local
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+    - name: Setup OpenTofu
+      uses: ./
+      with:
+        tofu_wrapper: false
+
+    - name: OpenTofu Init
+      shell: bash
+      run: tofu init
+
+    - name: OpenTofu Format
+      shell: bash
+      run: tofu fmt -check
+
+    - name: OpenTofu Plan
+      id: plan
+      shell: bash
+      run: tofu plan
