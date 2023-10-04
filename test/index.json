@@ -1,0 +1,181 @@
+{
+    "name": "opentofu",
+    "versions": {
+        "0.1.0": {
+            "name": "opentofu",
+            "version": "0.1.0",
+            "shasums": "opentofu_0.1.0_SHA256SUMS",
+            "shasums_signature": "opentofu_0.1.0_SHA256SUMS.sig",
+            "builds": [
+                {
+                    "name": "opentofu",
+                    "version": "0.1.0",
+                    "os": "darwin",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.1.0_darwin_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.0/opentofu_0.1.0_darwin_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.0",
+                    "os": "linux",
+                    "arch": "386",
+                    "filename": "opentofu_0.1.0_linux_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.0/opentofu_0.1.0_linux_386.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.0",
+                    "os": "linux",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.1.0_linux_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.0/opentofu_0.1.0_linux_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.0",
+                    "os": "windows",
+                    "arch": "386",
+                    "filename": "opentofu_0.1.0_windows_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.0/opentofu_0.1.0_windows_386.zip"
+                }
+            ]
+        },
+        "0.1.1": {
+            "name": "opentofu",
+            "version": "0.1.1",
+            "shasums": "opentofu_0.1.1_SHA256SUMS",
+            "shasums_signature": "opentofu_0.1.1_SHA256SUMS.sig",
+            "builds": [
+                {
+                    "name": "opentofu",
+                    "version": "0.1.1",
+                    "os": "darwin",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.1.1_darwin_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.1/opentofu_0.1.1_darwin_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.1",
+                    "os": "linux",
+                    "arch": "386",
+                    "filename": "opentofu_0.1.1_linux_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.1/opentofu_0.1.1_linux_386.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.1",
+                    "os": "linux",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.1.1_linux_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.1/opentofu_0.1.1_linux_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.1.1",
+                    "os": "windows",
+                    "arch": "386",
+                    "filename": "opentofu_0.1.1_windows_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.1.1/opentofu_0.1.1_windows_386.zip"
+                }
+            ]
+        },
+        "0.10.0": {
+            "name": "opentofu",
+            "version": "0.10.0",
+            "shasums": "opentofu_0.10.0_SHA256SUMS",
+            "shasums_signature": "opentofu_0.10.0_SHA256SUMS.sig",
+            "builds": [
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "darwin",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.10.0_darwin_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_darwin_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "freebsd",
+                    "arch": "386",
+                    "filename": "opentofu_0.10.0_freebsd_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_freebsd_386.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "freebsd",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.10.0_freebsd_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_freebsd_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "freebsd",
+                    "arch": "arm",
+                    "filename": "opentofu_0.10.0_freebsd_arm.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_freebsd_arm.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "linux",
+                    "arch": "386",
+                    "filename": "opentofu_0.10.0_linux_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_linux_386.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "linux",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.10.0_linux_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_linux_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "linux",
+                    "arch": "arm",
+                    "filename": "opentofu_0.10.0_linux_arm.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_linux_arm.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "openbsd",
+                    "arch": "386",
+                    "filename": "opentofu_0.10.0_openbsd_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_openbsd_386.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "openbsd",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.10.0_openbsd_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_openbsd_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "solaris",
+                    "arch": "amd64",
+                    "filename": "opentofu_0.10.0_solaris_amd64.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_solaris_amd64.zip"
+                },
+                {
+                    "name": "opentofu",
+                    "version": "0.10.0",
+                    "os": "windows",
+                    "arch": "386",
+                    "filename": "opentofu_0.10.0_windows_386.zip",
+                    "url": "https://releases.hashicorp.com/opentofu/0.10.0/opentofu_0.10.0_windows_386.zip"
+                }
+            ]
+        }
+    }
+}

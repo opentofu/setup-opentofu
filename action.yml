@@ -1,0 +1,18 @@
+name: 'Setup OpenTofu'
+description: 'Sets up OpenTofu CLI in your GitHub Actions workflow.'
+author: 'HashiCorp, Inc.'
+inputs:
+  opentofu_version:
+    description: 'The version of OpenTofu CLI to install. Instead of full version string you can also specify constraint string starting with "<" (for example `<1.13.0`) to install the latest version satisfying the constraint. A value of `latest` will install the latest version of OpenTofu CLI. Defaults to `latest`.'
+    default: 'latest'
+    required: false
+  opentofu_wrapper:
+    description: 'Whether or not to install a wrapper to wrap subsequent calls of the `opentofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
+    default: 'true'
+    required: false
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+branding:
+  icon: 'terminal'
+  color: 'purple'
