@@ -19,6 +19,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         # TODO: add move versions to test when the feature is added
         tofu-versions: [latest]
+        tofu-wrapper: ["true", "false"]
     steps:
     - name: Checkout
       uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
@@ -27,40 +28,14 @@ jobs:
       uses: ./
       with:
         tofu_version: ${{ matrix['tofu-versions'] }}
+        tofu_wrapper: ${{ matrix['tofu-wrapper'] }}
 
-    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
-      if: ${{ matrix['tofu-versions'] != 'latest' }}
-      run: tofu version | grep ${{ matrix['tofu-versions']}}
-
-    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
-      if: ${{ matrix['tofu-versions'] == 'latest' }}
+    - name: Validate that OpenTofu was installed
       run: tofu version | grep 'OpenTofu v'
 
-  tofu-versions-no-wrapper:
-    name: 'OpenTofu Versions No Wrapper'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        # TODO: add more versions to test when the semver feature is implemented
-        tofu-versions: [latest]
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu (no wrapper) - ${{ matrix['tofu-versions'] }}
-      uses: ./
-      with:
-        tofu_version: ${{ matrix['tofu-versions'] }}
-        tofu_wrapper: false
-
-    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
+    - name: Validate the Version ${{ matrix['tofu-versions'] }} was installed
       if: ${{ matrix['tofu-versions'] != 'latest' }}
       run: tofu version | grep ${{ matrix['tofu-versions']}}
-
-    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
-      if: ${{ matrix['tofu-versions'] == 'latest' }}
-      run: tofu version | grep 'OpenTofu v'
 
 # TODO: uncomment when the semver feature is implemented
 #  tofu-versions-constraints:
@@ -70,6 +45,7 @@ jobs:
 #      matrix:
 #        os: [ubuntu-latest, windows-latest, macos-latest]
 #        tofu-versions: [~0.12, 0.12.x, <0.13.0]
+#        tofu-wrapper: ["true", "false"]
 #    steps:
 #    - name: Checkout
 #      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
@@ -78,6 +54,7 @@ jobs:
 #      uses: ./
 #      with:
 #        tofu_version: ${{ matrix['tofu-versions'] }}
+#        tofu-wrapper: ["true", "false"]
 #
 #    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
 #      run: tofu version | grep 'OpenTofu v0\.12'
@@ -191,37 +168,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu
-      uses: ./
-
-    - name: Check No Arguments
-      run: tofu || exit 0
-
-    - name: Check Single Argument
-      run: tofu help || exit 0
-
-    - name: Check Single Argument Hyphen
-      run: tofu -help
-
-    - name: Check Single Argument Double Hyphen
-      run: tofu --help
-
-    - name: Check Single Argument Subcommand
-      run: tofu fmt -check
-
-    - name: Check Multiple Arguments Subcommand
-      run: tofu fmt -check -list=true -no-color
-
-  tofu-arguments-no-wrapper:
-    name: 'OpenTofu Arguments No Wrapper'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        tofu-wrapper: ["true", "false"]
     steps:
     - name: Checkout
       uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
@@ -229,7 +176,7 @@ jobs:
     - name: Setup OpenTofu
       uses: ./
       with:
-        tofu_wrapper: false
+        tofu_wrapper: ${{ matrix['tofu-wrapper'] }}
 
     - name: Check No Arguments
       run: tofu || exit 0
@@ -255,6 +202,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        tofu-wrapper: ["true", "false"]
     defaults:
       run:
         working-directory: ./.github/workflows/data/local
@@ -264,6 +212,8 @@ jobs:
 
     - name: Setup OpenTofu
       uses: ./
+      with:
+        tofu_wrapper: ${{ matrix['tofu-wrapper'] }}
 
     - name: OpenTofu Init
       run: tofu init
@@ -277,31 +227,3 @@ jobs:
 
     - name: Print OpenTofu Plan
       run: echo "${{ steps.plan.outputs.stdout }}"
-
-  tofu-run-local-no-wrapper:
-    name: 'OpenTofu Run Local No Wrapper'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    defaults:
-      run:
-        working-directory: ./.github/workflows/data/local
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu
-      uses: ./
-      with:
-        tofu_wrapper: false
-
-    - name: OpenTofu Init
-      run: tofu init
-
-    - name: OpenTofu Format
-      run: tofu fmt -check
-
-    - name: OpenTofu Plan
-      id: plan
-      run: tofu plan
