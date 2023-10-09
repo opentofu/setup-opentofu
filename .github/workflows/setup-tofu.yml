@@ -266,20 +266,16 @@ jobs:
       uses: ./
 
     - name: OpenTofu Init
-      shell: bash
       run: tofu init
 
     - name: OpenTofu Format
-      shell: bash
       run: tofu fmt -check
 
     - name: OpenTofu Plan
       id: plan
-      shell: bash
       run: tofu plan
 
     - name: Print OpenTofu Plan
-      shell: bash
       run: echo "${{ steps.plan.outputs.stdout }}"
 
   tofu-run-local-no-wrapper:
@@ -301,14 +297,11 @@ jobs:
         tofu_wrapper: false
 
     - name: OpenTofu Init
-      shell: bash
       run: tofu init
 
     - name: OpenTofu Format
-      shell: bash
       run: tofu fmt -check
 
     - name: OpenTofu Plan
       id: plan
-      shell: bash
       run: tofu plan
