@@ -44,7 +44,7 @@ jobs:
 #    strategy:
 #      matrix:
 #        os: [ubuntu-latest, windows-latest, macos-latest]
-#        tofu-versions: [~0.12, 0.12.x, <0.13.0]
+#        tofu-versions: [1.6.0-alpha1]
 #        tofu-wrapper: ["true", "false"]
 #    steps:
 #    - name: Checkout
@@ -57,110 +57,7 @@ jobs:
 #        tofu-wrapper: ["true", "false"]
 #
 #    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
-#      run: tofu version | grep 'OpenTofu v0\.12'
-
-# TODO: uncomment when the semver feature is implemented
-#  tofu-versions-constraints-no-wrapper:
-#    name: 'OpenTofu Versions Constraints No Wrapper'
-#    runs-on: ${{ matrix.os }}
-#    strategy:
-#      matrix:
-#        os: [ubuntu-latest, windows-latest, macos-latest]
-#        tofu-versions: [~0.12, 0.12.x, <0.13.0]
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-#
-#    - name: Setup OpenTofu (no wrapper) - ${{ matrix['tofu-versions'] }}
-#      uses: ./
-#      with:
-#        tofu_version: ${{ matrix['tofu-versions'] }}
-#        tofu_wrapper: false
-#
-#    - name: Validate OpenTofu Version - ${{ matrix['tofu-versions'] }}
-#      run: tofu version | grep 'OpenTofu v0\.12'
-
-  tofu-credentials-cloud:
-    name: 'OpenTofu Cloud Credentials'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    env:
-      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu
-      uses: ./
-      with:
-        cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
-
-    - name: Validate OpenTofu Credentials (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        cat ${APPDATA}/tofu.rc | grep 'credentials "app.terraform.io"'
-        cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
-
-    - name: Validate Teraform Credentials (Linux & macOS)
-      if: runner.os != 'Windows'
-      run: |
-        cat ${HOME}/.tofurc | grep 'credentials "app.terraform.io"'
-        cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
-
-  tofu-credentials-enterprise:
-    name: 'OpenTofu Enterprise Credentials'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    env:
-      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu
-      uses: ./
-      with:
-        cli_config_credentials_hostname: 'tofu.example.com'
-        cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
-
-    - name: Validate OpenTofu Credentials (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        cat ${APPDATA}/tofu.rc | grep 'credentials "tofu.example.com"'
-        cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
-
-    - name: Validate Teraform Credentials (Linux & macOS)
-      if: runner.os != 'Windows'
-      run: |
-        cat ${HOME}/.tofurc | grep 'credentials "tofu.example.com"'
-        cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
-
-  tofu-credentials-none:
-    name: 'OpenTofu No Credentials'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-    - name: Checkout
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
-
-    - name: Setup OpenTofu
-      uses: ./
-
-    - name: Validate OpenTofu Credentials (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        [[ -f ${APPDATA}/tofu.rc ]] || exit 0
-
-    - name: Validate Teraform Credentials (Linux & macOS)
-      if: runner.os != 'Windows'
-      run: |
-        [[ -f ${HOME}/.tofurc ]] || exit 0
+#      run: tofu version | grep 'OpenTofu v1\.6\.0-alpha1'
 
   tofu-arguments:
     name: 'OpenTofu Arguments'
@@ -228,3 +125,85 @@ jobs:
     - name: Print OpenTofu Plan
       if: ${{ matrix['tofu-wrapper'] == 'true' }}
       run: echo "${{ steps.plan.outputs.stdout }}"
+
+  tofu-credentials-cloud:
+    name: 'OpenTofu Cloud Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    env:
+      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Setup OpenTofu
+        uses: ./
+        with:
+          cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
+
+      - name: Validate OpenTofu Credentials (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cat ${APPDATA}/tofu.rc | grep 'credentials "app.terraform.io"'
+          cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+      - name: Validate Teraform Credentials (Linux & macOS)
+        if: runner.os != 'Windows'
+        run: |
+          cat ${HOME}/.tofurc | grep 'credentials "app.terraform.io"'
+          cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+  tofu-credentials-enterprise:
+    name: 'OpenTofu Enterprise Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    env:
+      TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Setup OpenTofu
+        uses: ./
+        with:
+          cli_config_credentials_hostname: 'tofu.example.com'
+          cli_config_credentials_token: ${{ env.TF_CLOUD_API_TOKEN }}
+
+      - name: Validate OpenTofu Credentials (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cat ${APPDATA}/tofu.rc | grep 'credentials "tofu.example.com"'
+          cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+      - name: Validate Teraform Credentials (Linux & macOS)
+        if: runner.os != 'Windows'
+        run: |
+          cat ${HOME}/.tofurc | grep 'credentials "tofu.example.com"'
+          cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+
+  tofu-credentials-none:
+    name: 'OpenTofu No Credentials'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Setup OpenTofu
+        uses: ./
+
+      - name: Validate OpenTofu Credentials (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          [[ -f ${APPDATA}/tofu.rc ]] || exit 0
+
+      - name: Validate Teraform Credentials (Linux & macOS)
+        if: runner.os != 'Windows'
+        run: |
+          [[ -f ${HOME}/.tofurc ]] || exit 0
