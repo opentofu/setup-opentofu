@@ -3,7 +3,7 @@
 The `opentofu/setup-opentofu` action sets up OpenTofu CLI in your GitHub Actions workflow by:
 
 - Downloading the latest version of OpenTofu CLI and adding it to the `PATH`.
-- Configuring the [CLI configuration file](https://www.terraform.io/docs/commands/cli-config.html) with a Terraform Cloud/Enterprise hostname and API token.
+- Configuring the [CLI configuration file](https://opentofu.org/docs/cli/config/config-file/) with a Terraform Cloud/Enterprise hostname and API token.
 - Installing a wrapper script to wrap subsequent calls of the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. (This can be optionally skipped if subsequent steps in the same job do not need to access the results of
   OpenTofu commands.)
 

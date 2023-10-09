@@ -123,14 +123,14 @@ jobs:
     - name: Validate OpenTofu Credentials (Windows)
       if: runner.os == 'Windows'
       run: |
-        cat ${APPDATA}/terraform.rc | grep 'credentials "app.terraform.io"'
-        cat ${APPDATA}/terraform.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+        cat ${APPDATA}/tofu.rc | grep 'credentials "app.terraform.io"'
+        cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
 
     - name: Validate Teraform Credentials (Linux & macOS)
       if: runner.os != 'Windows'
       run: |
-        cat ${HOME}/.terraformrc | grep 'credentials "app.terraform.io"'
-        cat ${HOME}/.terraformrc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+        cat ${HOME}/.tofurc | grep 'credentials "app.terraform.io"'
+        cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
 
   tofu-credentials-enterprise:
     name: 'OpenTofu Enterprise Credentials'
@@ -153,14 +153,14 @@ jobs:
     - name: Validate OpenTofu Credentials (Windows)
       if: runner.os == 'Windows'
       run: |
-        cat ${APPDATA}/terraform.rc | grep 'credentials "tofu.example.com"'
-        cat ${APPDATA}/terraform.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+        cat ${APPDATA}/tofu.rc | grep 'credentials "tofu.example.com"'
+        cat ${APPDATA}/tofu.rc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
 
     - name: Validate Teraform Credentials (Linux & macOS)
       if: runner.os != 'Windows'
       run: |
-        cat ${HOME}/.terraformrc | grep 'credentials "tofu.example.com"'
-        cat ${HOME}/.terraformrc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
+        cat ${HOME}/.tofurc | grep 'credentials "tofu.example.com"'
+        cat ${HOME}/.tofurc | grep 'token = "${{ env.TF_CLOUD_API_TOKEN }}"'
 
   tofu-credentials-none:
     name: 'OpenTofu No Credentials'
@@ -178,12 +178,12 @@ jobs:
     - name: Validate OpenTofu Credentials (Windows)
       if: runner.os == 'Windows'
       run: |
-        [[ -f ${APPDATA}/terraform.rc ]] || exit 0
+        [[ -f ${APPDATA}/tofu.rc ]] || exit 0
 
     - name: Validate Teraform Credentials (Linux & macOS)
       if: runner.os != 'Windows'
       run: |
-        [[ -f ${HOME}/.terraformrc ]] || exit 0
+        [[ -f ${HOME}/.tofurc ]] || exit 0
 
   tofu-arguments:
     name: 'OpenTofu Arguments'

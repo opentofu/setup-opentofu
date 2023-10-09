@@ -180,8 +180,8 @@ credentials "${credentialsHostname}" {
 
   // default to OS-specific path
   let credsFile = osPlat === 'win32'
-    ? `${process.env.APPDATA}/terraform.rc`
-    : `${process.env.HOME}/.terraformrc`;
+    ? `${process.env.APPDATA}/tofu.rc`
+    : `${process.env.HOME}/.tofurc`;
 
   // override with TF_CLI_CONFIG_FILE environment variable
   credsFile = process.env.TF_CLI_CONFIG_FILE ? process.env.TF_CLI_CONFIG_FILE : credsFile;
