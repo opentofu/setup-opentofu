@@ -179,11 +179,9 @@ jobs:
         tofu_wrapper: ${{ matrix['tofu-wrapper'] }}
 
     - name: Check No Arguments
-      shell: bash
       run: tofu || exit 0
 
     - name: Check Single Argument
-      shell: bash
       run: tofu help || exit 0
 
     - name: Check Single Argument Hyphen
@@ -228,4 +226,5 @@ jobs:
       run: tofu plan
 
     - name: Print OpenTofu Plan
+      if: ${{ matrix['tofu-wrapper'] == 'true' }}
       run: echo "${{ steps.plan.outputs.stdout }}"
