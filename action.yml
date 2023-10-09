@@ -10,7 +10,7 @@ inputs:
     description: 'The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the OpenTofu CLI configuration file.'
     required: false
   tofu_version:
-    description: 'The version of OpenTofu CLI to install. If no version is given, it will default to `latest`.
+    description: 'The version of OpenTofu CLI to install. If no version is given, it will default to `latest`.'
     default: 'latest'
     required: false
   tofu_wrapper:
