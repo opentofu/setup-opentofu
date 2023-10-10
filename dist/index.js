@@ -84,7 +84,7 @@ async function getRelease (version, fetchReleasesFn = fetchReleases) {
   const versionsFound = releases.map(release => release.version);
   let versionSelected;
   if (version === latestVersionLabel) {
-    versionSelected = findLatestVersion(versionsFound);
+    versionSelected = await findLatestVersion(versionsFound);
   } else {
     versionSelected = await findLatestVersionInRange(versionsFound, versionsRange);
   }
@@ -249,7 +249,6 @@ async function run () {
     const release = await releases.getRelease(version);
     const platform = mapOS(osPlatform);
     const arch = mapArch(osArch);
-    core.debug(`Getting build for OpenTofu version ${release.version}: ${platform} ${arch}`);
     const build = release.getBuild(platform, arch);
     if (!build) {
       throw new Error(`OpenTofu version ${version} not available for ${platform} and ${arch}`);
