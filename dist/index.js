@@ -43,7 +43,7 @@ async function fetchReleases () {
   });
 
   if (!resp.ok) {
-    throw Error('failed fetching releases');
+    throw new Error('failed fetching releases');
   }
 
   const releasesMeta = await resp.json();
@@ -100,8 +100,7 @@ async function getRelease (version, fetchReleasesFn = fetchReleases) {
 // See: https://github.com/hashicorp/setup-terraform/blob/e192cfcbae6c6ed207c277ed7624131996c9bf13/lib/setup-terraform.js#L15
 module.exports = {
   getRelease,
-  Release,
-  Build
+  Release
 };
 
 
