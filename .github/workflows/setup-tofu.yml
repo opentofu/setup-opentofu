@@ -35,7 +35,6 @@ jobs:
     - name: Validate the Version ${{ matrix['tofu-versions'] }} was installed
       if: ${{ matrix['tofu-versions'] != 'latest' }}
       run: tofu version | grep ${{ matrix['tofu-versions']}}
-
   tofu-arguments:
     name: 'OpenTofu Arguments'
     runs-on: ${{ matrix.os }}
@@ -69,7 +68,6 @@ jobs:
 
     - name: Check Multiple Arguments Subcommand
       run: tofu fmt -check -list=true -no-color
-
   tofu-run-local:
     name: 'OpenTofu Run Local'
     runs-on: ${{ matrix.os }}
@@ -102,7 +100,6 @@ jobs:
     - name: Print OpenTofu Plan
       if: ${{ matrix['tofu-wrapper'] == 'true' }}
       run: echo "${{ steps.plan.outputs.stdout }}"
-
   tofu-credentials-cloud:
     name: 'OpenTofu Cloud Credentials'
     runs-on: ${{ matrix.os }}
@@ -184,3 +181,4 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           [[ -f ${HOME}/.tofurc ]] || exit 0
+
