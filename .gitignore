@@ -2,13 +2,12 @@ node_modules/
 
 # Editors
 .vscode
+.idea/
+.iml
 
 # Logs
-logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Runtime data
 pids
@@ -25,23 +24,11 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
 # Other Dependency directories
 jspm_packages/
-
-# TypeScript v1 declaration files
-typings/
 
 # Optional npm cache directory
 .npm
@@ -61,12 +48,5 @@ typings/
 # dotenv environment variables file
 .env
 
-# next.js build output
-.next
-
 # ./wrapper/dist gets included in top-level ./dist
 wrapper/dist
-
-# Jetbrains IDEs
-.idea/
-.iml
