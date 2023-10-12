@@ -145,11 +145,15 @@ function mapOS (os) {
   return os;
 }
 
-async function downloadCLI (url) {
+async function downloadAndExtractCLI (url) {
   core.debug(`Downloading OpenTofu CLI from ${url}`);
   const pathToCLIZip = await tc.downloadTool(url);
 
-  let pathToCLI = '';
+  if (!pathToCLIZip) {
+    throw new Error(`Unable to download OpenTofu from ${url}`);
+  }
+
+  let pathToCLI;
 
   core.debug('Extracting OpenTofu CLI zip file');
   if (os.platform().startsWith('win')) {
@@ -164,8 +168,8 @@ async function downloadCLI (url) {
 
   core.debug(`OpenTofu CLI path is ${pathToCLI}.`);
 
-  if (!pathToCLIZip || !pathToCLI) {
-    throw new Error(`Unable to download OpenTofu from ${url}`);
+  if (!pathToCLI) {
+    throw new Error('Unable to unzip OpenTofu');
   }
 
   return pathToCLI;
@@ -254,7 +258,7 @@ async function run () {
     }
 
     // Download requested version
-    const pathToCLI = await downloadCLI(build.url);
+    const pathToCLI = await downloadAndExtractCLI(build.url);
 
     // Install our wrapper
     if (wrapper) {
