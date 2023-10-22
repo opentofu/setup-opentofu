@@ -47,7 +47,7 @@ Credentials for Terraform Enterprise (TFE) can be configured:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
   with:
     cli_config_credentials_hostname: 'tofu.example.com'
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
