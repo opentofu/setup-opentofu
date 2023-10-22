@@ -66,7 +66,7 @@ Subsequent steps can access outputs when the wrapper script is installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
 
 - run: tofu init
 
