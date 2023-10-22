@@ -38,7 +38,7 @@ Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) 
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
   with:
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 ```
