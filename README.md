@@ -94,7 +94,7 @@ permissions:
   pull-requests: write
 steps:
 - uses: actions/checkout@v3
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
 
 - name: OpenTofu fmt
   id: fmt
