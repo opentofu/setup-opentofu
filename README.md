@@ -57,7 +57,7 @@ The wrapper script installation can be skipped by setting the `tofu_wrapper` var
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
   with:
     tofu_wrapper: false
 ```
