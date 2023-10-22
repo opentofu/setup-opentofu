@@ -22,7 +22,7 @@ The default configuration installs the latest version of OpenTofu CLI and instal
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
 ```
 
 A specific version of OpenTofu CLI can be installed:
