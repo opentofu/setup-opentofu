@@ -29,7 +29,7 @@ A specific version of OpenTofu CLI can be installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1.0.0
+- uses: opentofu/setup-opentofu@v1
   with:
     tofu_version: 1.6.0-alpha1
 ```
