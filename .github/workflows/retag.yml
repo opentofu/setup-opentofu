@@ -1,0 +1,21 @@
+name: Retag
+
+on:
+  push:
+    tags:
+      - 'v[1-2].[0-9]+.[0-9]+*'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: |
+        set -o pipefail
+        git tag --force "$(grep '^v[1-2]\.[0-9]\+\.[0-9]\+\(.*\)\?$' <<< ${GITHUB_REF#refs/*/} | sed 's/^v\([1-2]\)\..*/v\1/')"
+        git push --tag --force
+
