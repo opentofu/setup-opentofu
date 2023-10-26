@@ -10,6 +10,9 @@ defaults:
   run:
     shell: bash
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   tofu-versions:
     name: 'OpenTofu Versions'
@@ -181,4 +184,3 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           [[ -f ${HOME}/.tofurc ]] || exit 0
-
