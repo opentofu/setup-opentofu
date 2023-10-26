@@ -1,6 +1,6 @@
 {
   "name": "setup-opentofu",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "Setup OpenTofu CLI for GitHub Actions",
   "license": "MPL-2.0",
   "publisher": "OpenTofu",
@@ -29,7 +29,6 @@
     "@vercel/ncc": "0.38.1",
     "husky": "8.0.3",
     "jest": "29.7.0",
-    "nock": "13.3.6",
     "semistandard": "17.0.0"
   },
   "semistandard": {
