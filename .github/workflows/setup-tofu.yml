@@ -11,7 +11,7 @@ defaults:
     shell: bash
 
 env:
-  GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   tofu-versions:
