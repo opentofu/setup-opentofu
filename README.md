@@ -22,14 +22,14 @@ The default configuration installs the latest version of OpenTofu CLI and instal
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
 ```
 
 A specific version of OpenTofu CLI can be installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
   with:
     tofu_version: 1.6.0-alpha1
 ```
@@ -38,7 +38,7 @@ Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) 
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
   with:
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 ```
@@ -47,7 +47,7 @@ Credentials for Terraform Enterprise (TFE) can be configured:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
   with:
     cli_config_credentials_hostname: 'tofu.example.com'
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -57,7 +57,7 @@ The wrapper script installation can be skipped by setting the `tofu_wrapper` var
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
   with:
     tofu_wrapper: false
 ```
@@ -66,7 +66,7 @@ Subsequent steps can access outputs when the wrapper script is installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
 
 - run: tofu init
 
@@ -94,7 +94,7 @@ permissions:
   pull-requests: write
 steps:
 - uses: actions/checkout@v3
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
 
 - name: OpenTofu fmt
   id: fmt
@@ -162,7 +162,7 @@ permissions:
   pull-requests: write
 steps:
 - uses: actions/checkout@v3
-- uses: opentofu/setup-opentofu
+- uses: opentofu/setup-opentofu@v1
 
 - name: OpenTofu fmt
   id: fmt
