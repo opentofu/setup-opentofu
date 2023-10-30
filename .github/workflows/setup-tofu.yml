@@ -80,6 +80,7 @@ jobs:
         tofu-wrapper: [true, false]
     defaults:
       run:
+        shell: bash
         working-directory: ./.github/workflows/data/local
     steps:
     - name: Checkout
