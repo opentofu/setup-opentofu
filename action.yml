@@ -29,8 +29,8 @@ outputs:
     value: '126'
 
 branding:
-  icon: 'terminal'
-  color: 'purple'
+  icon: 'box'
+  color: 'yellow'
 runs:
   using: 'node20'
   main: 'dist/index.js'
