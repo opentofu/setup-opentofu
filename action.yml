@@ -17,6 +17,10 @@ inputs:
     description: 'Whether or not to install a wrapper to wrap subsequent calls of the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
     default: 'true'
     required: false
+  github-token:
+    description: The GitHub token used to requests GitHub API
+    default: ${{ github.token }}
+    required: false
 outputs:
   stdout:
     description: 'The STDOUT stream of the call to the `tofu` binary.'

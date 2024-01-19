@@ -9,6 +9,9 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
+// External
+const core = __nccwpck_require__(2186);
+
 class Build {
   constructor (name, url) {
     this.name = name;
@@ -35,14 +38,15 @@ class Release {
  */
 async function fetchReleases () {
   const url = 'https://api.github.com/repos/opentofu/opentofu/releases';
+  const githubToken = core.getInput('github_token');
 
   const headers = {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28'
   };
 
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  if (githubToken) {
+    headers.Authorization = `Bearer ${githubToken}`;
   }
 
   const resp = await fetch(url, {
