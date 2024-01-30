@@ -33,7 +33,7 @@ class Release {
  *
  * @return {Array<Release>} Releases.
  */
-async function fetchReleases () {
+async function fetchReleases (githubToken) {
   const url = 'https://api.github.com/repos/opentofu/opentofu/releases';
 
   const headers = {
@@ -41,8 +41,8 @@ async function fetchReleases () {
     'X-GitHub-Api-Version': '2022-11-28'
   };
 
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  if (githubToken) {
+    headers.Authorization = `Bearer ${githubToken}`;
   }
 
   const resp = await fetch(url, {
@@ -50,7 +50,7 @@ async function fetchReleases () {
   });
 
   if (!resp.ok) {
-    throw new Error('failed fetching releases');
+    throw new Error('failed fetching releases (' + resp.status + ')');
   }
 
   const releasesMeta = await resp.json();
@@ -72,10 +72,11 @@ async function findLatestVersionInRange (versions, range) {
  * Fetches the release given the version.
  *
  * @param {string} version: Release version.
+ * @param {string} githubToken: GitHub token to use for working around rate limits.
  * @param {function} fetchReleasesFn: Optional function to fetch releases.
  * @return {Release} Release.
  */
-async function getRelease (version, fetchReleasesFn = fetchReleases) {
+async function getRelease (version, githubToken, fetchReleasesFn = fetchReleases) {
   const latestVersionLabel = 'latest';
 
   const versionsRange = semver.validRange(version, { prerelease: true, loose: true });
@@ -83,7 +84,7 @@ async function getRelease (version, fetchReleasesFn = fetchReleases) {
     throw new Error('Input version cannot be used, see semver: https://semver.org/spec/v2.0.0.html');
   }
 
-  const releases = await fetchReleasesFn();
+  const releases = await fetchReleasesFn(githubToken);
 
   if (releases === null || releases.length === 0) {
     throw new Error('No tofu releases found, please contact OpenTofu');
@@ -251,13 +252,19 @@ async function run () {
     const credentialsHostname = core.getInput('cli_config_credentials_hostname');
     const credentialsToken = core.getInput('cli_config_credentials_token');
     const wrapper = core.getInput('tofu_wrapper') === 'true';
+    let githubToken = core.getInput('github_token');
+    if (githubToken === '' && !(process.env.FORGEJO_ACTIONS || process.env.GITEA_ACTIONS)) {
+      // Only default to the environment variable when running in GitHub Actions. Don't do this for other CI systems
+      // that may set the GITHUB_TOKEN environment variable.
+      githubToken = process.env.GITHUB_TOKEN;
+    }
 
     // Gather OS details
     const osPlatform = os.platform();
     const osArch = os.arch();
 
     core.debug(`Finding releases for OpenTofu version ${version}`);
-    const release = await releases.getRelease(version);
+    const release = await releases.getRelease(version, githubToken);
     const platform = mapOS(osPlatform);
     const arch = mapArch(osArch);
     const build = release.getBuild(platform, arch);
