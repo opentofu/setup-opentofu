@@ -31,7 +31,7 @@ A specific version of OpenTofu CLI can be installed:
 steps:
 - uses: opentofu/setup-opentofu@v1
   with:
-    tofu_version: 1.6.0-alpha1
+    tofu_version: 1.6.0
 ```
 
 Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) can be configured:
@@ -257,6 +257,7 @@ The action supports the following inputs:
 - `tofu_wrapper` - (optional) Whether to install a wrapper to wrap subsequent calls of
   the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs
   named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.
+- `github_token` - (optional) Override the GitHub token read from the environment variable. Defaults to the value of the `GITHUB_TOKEN` environment variable unless running on Forgejo or Gitea.
 
 ## Outputs
 
