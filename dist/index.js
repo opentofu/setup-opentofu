@@ -39,13 +39,14 @@ class Release {
 async function fetchReleases () {
   const url = 'https://api.github.com/repos/opentofu/opentofu/releases';
   const githubToken = core.getInput('github_token');
+  const is3rdPartyRunner = process.env.FORGEJO_ACTIONS || process.env.GITEA_ACTIONS;
 
   const headers = {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28'
   };
 
-  if (githubToken) {
+  if (githubToken === '' && !is3rdPartyRunner) {
     headers.Authorization = `Bearer ${githubToken}`;
   }
 
