@@ -61,7 +61,7 @@ async function fetchReleases (githubToken) {
 const semver = __nccwpck_require__(1383);
 
 async function findLatestVersion (versions) {
-  return versions.sort((a, b) => semver.rcompare(a, b))[0];
+  return versions.filter((v) => semver.prerelease(v) === null).sort((a, b) => semver.rcompare(a, b))[0];
 }
 
 async function findLatestVersionInRange (versions, range) {
