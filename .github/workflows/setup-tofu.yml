@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        tofu-versions: [1.6.0-alpha1, latest]
+        tofu-versions: [1.6.0, latest]
         tofu-wrapper: [true, false]
     steps:
     - name: Checkout
