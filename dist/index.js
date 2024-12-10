@@ -10,16 +10,16 @@
  */
 
 class Build {
-  constructor (name, url) {
+  constructor (version, name) {
     this.name = name;
-    this.url = url;
+    this.url = 'https://github.com/opentofu/opentofu/releases/download/v' + version + '/' + name;
   }
 }
 
 class Release {
   constructor (releaseMeta) {
-    this.version = releaseMeta.tag_name.replace('v', '');
-    this.builds = releaseMeta.assets.map(asset => new Build(asset.name, asset.browser_download_url));
+    this.version = releaseMeta.id.replace('v', '');
+    this.builds = releaseMeta.files.map(asset => new Build(this.version, asset));
   }
 
   getBuild (platform, arch) {
@@ -34,16 +34,11 @@ class Release {
  * @return {Array<Release>} Releases.
  */
 async function fetchReleases (githubToken) {
-  const url = 'https://api.github.com/repos/opentofu/opentofu/releases';
+  const url = 'https://get.opentofu.org/tofu/api.json';
 
   const headers = {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28'
+    Accept: 'application/json'
   };
-
-  if (githubToken) {
-    headers.Authorization = `Bearer ${githubToken}`;
-  }
 
   const resp = await fetch(url, {
     headers
@@ -54,8 +49,12 @@ async function fetchReleases (githubToken) {
   }
 
   const releasesMeta = await resp.json();
+  /**
+     * @type {Array}
+     */
+  const versions = releasesMeta.versions;
 
-  return releasesMeta.map(releaseMeta => new Release(releaseMeta));
+  return versions.map(releaseMeta => new Release(releaseMeta));
 }
 
 const semver = __nccwpck_require__(1383);
@@ -168,7 +167,7 @@ async function downloadAndExtractCLI (url) {
   if (os.platform().startsWith('win')) {
     core.debug(`OpenTofu CLI Download Path is ${pathToCLIZip}`);
     const fixedPathToCLIZip = `${pathToCLIZip}.zip`;
-    io.mv(pathToCLIZip, fixedPathToCLIZip);
+    await io.mv(pathToCLIZip, fixedPathToCLIZip);
     core.debug(`Moved download to ${fixedPathToCLIZip}`);
     pathToCLI = await tc.extractZip(fixedPathToCLIZip);
   } else {
@@ -225,7 +224,7 @@ async function addCredentials (credentialsHostname, credentialsToken, osPlat) {
 credentials "${credentialsHostname}" {
   token = "${credentialsToken}"
 }`.trim();
-  // eslint-enable
+    // eslint-enable
 
   // default to OS-specific path
   let credsFile = osPlat === 'win32'
