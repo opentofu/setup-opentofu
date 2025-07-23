@@ -1,4 +1,6 @@
 # GitHub Action for setting up OpenTofu
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fopentofu%2Fsetup-opentofu.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fopentofu%2Fsetup-opentofu?ref=badge_shield)
+
 
 > [!NOTE]
 > This is a community-maintained repository. The OpenTofu team does not fix non-critical bugs or add features, but is happy to review community pull requests.
@@ -266,3 +268,6 @@ to `true`, the following outputs are available for subsequent steps that call th
 
 [Mozilla Public License v2.0](LICENSE)
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fopentofu%2Fsetup-opentofu.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fopentofu%2Fsetup-opentofu?ref=badge_large)
