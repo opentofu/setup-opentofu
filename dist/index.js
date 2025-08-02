@@ -247,7 +247,8 @@ credentials "${credentialsHostname}" {
 async function run () {
   try {
     // Gather GitHub Actions inputs
-    const version = core.getInput('tofu_version');
+    let version = core.getInput('tofu_version');
+    const versionFile = core.getInput('tofu_version_file');
     const credentialsHostname = core.getInput('cli_config_credentials_hostname');
     const credentialsToken = core.getInput('cli_config_credentials_token');
     const wrapper = core.getInput('tofu_wrapper') === 'true';
@@ -256,6 +257,27 @@ async function run () {
       // Only default to the environment variable when running in GitHub Actions. Don't do this for other CI systems
       // that may set the GITHUB_TOKEN environment variable.
       githubToken = process.env.GITHUB_TOKEN;
+    }
+
+    // If tofu_version_file is provided, read the version from the file
+    if (versionFile) {
+      try {
+        core.debug(`Reading OpenTofu version from file: ${versionFile}`);
+        const fileVersion = await fs.readFile(versionFile, 'utf8');
+        const trimmedVersion = fileVersion.trim();
+        if (trimmedVersion) {
+          version = trimmedVersion;
+          core.debug(`Using version from file: ${version}`);
+        } else {
+          core.warning(
+            `Version file ${versionFile} is empty, using tofu_version input: ${version}`
+          );
+        }
+      } catch (error) {
+        core.warning(
+          `Failed to read version from file ${versionFile}: ${error.message}. Using tofu_version input: ${version}`
+        );
+      }
     }
 
     // Gather OS details

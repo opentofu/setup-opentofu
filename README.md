@@ -28,6 +28,17 @@ steps:
     tofu_version: 1.6.0
 ```
 
+You can also specify the version in a file (e.g., `.opentofu-version`):
+
+```yaml
+steps:
+  - uses: opentofu/setup-opentofu@v1
+    with:
+      tofu_version_file: .opentofu-version
+```
+
+Supported version syntax is the same as for the `tofu_version` input. If both `tofu_version` and `tofu_version_file` are provided, the version number in the file takes precedence.
+
 Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) can be configured:
 
 ```yaml
@@ -248,6 +259,8 @@ The action supports the following inputs:
   for available range specifications). Examples are: `<1.6.0-beta`, `~1.6.0-alpha`, `1.6.0-alpha2` (all three installing
   the latest available `1.6.0-alpha2` version). Prerelease versions can be specified and a range will stay within the
   given tag such as `beta` or `rc`. If no version is given, it will default to `latest`.
+- `tofu_version_file` - (optional) Path to a file containing the OpenTofu version to install. Supported version syntax
+  is the same as for the `tofu_version` input. Takes precedence over `tofu_version` if both are provided.
 - `tofu_wrapper` - (optional) Whether to install a wrapper to wrap subsequent calls of
   the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs
   named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.
