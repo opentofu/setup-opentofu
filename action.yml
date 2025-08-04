@@ -13,6 +13,9 @@ inputs:
     description: 'The version of OpenTofu CLI to install. If no version is given, it will default to `latest`.'
     default: 'latest'
     required: false
+  tofu_version_file:
+    description: 'Path to a file containing the OpenTofu version to install. Takes precedence over `tofu_version` if both are provided.'
+    required: false
   tofu_wrapper:
     description: 'Whether or not to install a wrapper to wrap subsequent calls of the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
     default: 'true'
