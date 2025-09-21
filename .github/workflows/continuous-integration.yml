@@ -9,11 +9,11 @@ on:
 jobs:
   check-dist:
     name: Check dist/ directory
-    uses: actions/reusable-workflows/.github/workflows/check-dist.yml@967035ce963867fb956a309c9b67512314bc7c1f
+    uses: actions/reusable-workflows/.github/workflows/check-dist.yml@2826fb8353263a138210fc017301ce5767a9c0d4
     with:
-      node-version: "20.x"
+      node-version: "24.x"
   test:
     name: Test
-    uses: actions/reusable-workflows/.github/workflows/basic-validation.yml@967035ce963867fb956a309c9b67512314bc7c1f
+    uses: actions/reusable-workflows/.github/workflows/basic-validation.yml@2826fb8353263a138210fc017301ce5767a9c0d4
     with:
-      node-version: "20.x"
+      node-version: "24.x"
