@@ -26,7 +26,7 @@
     "semver": "7.7.2"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.38.3",
+    "@vercel/ncc": "0.38.4",
     "husky": "9.1.7",
     "jest": "30.0.5",
     "semistandard": "17.0.0"
