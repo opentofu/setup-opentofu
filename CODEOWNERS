@@ -5,3 +5,9 @@
 # In the future, we will have a Github team of global code owners of the entire package
 # Later on, we will start splitting up the responsibilities, and packages will be assigned more specific code owners
 * @opentofu/maintainers
+
+# The last matching pattern takes the most
+# precedence for CODEOWNERS. This user is responsible for taking care of the Dependabot issues: there's a false positive though,
+# since we cannot match specific keys of the file and assign only when dependencies are being changed. For now, this should be
+# good enough.
+package.json @diofeher
