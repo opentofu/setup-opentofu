@@ -5,3 +5,8 @@
 # In the future, we will have a Github team of global code owners of the entire package
 # Later on, we will start splitting up the responsibilities, and packages will be assigned more specific code owners
 * @opentofu/maintainers
+
+# The last matching pattern takes the most precedence for CODEOWNERS. CODEOWNERS does not have fine-grained control so we will
+# just match whole changes for these specific files, but @diofeher is responsible for taking care of the Dependabot updates 
+# in this repository.
+package*.json @diofeher
