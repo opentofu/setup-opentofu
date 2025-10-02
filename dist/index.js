@@ -47,7 +47,7 @@ async function fetchReleases (githubToken) {
 
   const resp = await http.get(url, headers);
 
-  if (resp.message.statusCode !== 200) {
+  if (resp.message.statusCode !== hc.HttpCodes.OK) {
     throw new Error('failed fetching releases (' + resp.message.statusCode + ')');
   }
   
