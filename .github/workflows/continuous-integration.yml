@@ -1,9 +1,9 @@
-name: 'Continuous Integration'
+name: "Continuous Integration"
 
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
 
 jobs:
@@ -11,9 +11,9 @@ jobs:
     name: Check dist/ directory
     uses: actions/reusable-workflows/.github/workflows/check-dist.yml@2826fb8353263a138210fc017301ce5767a9c0d4
     with:
-      node-version: "20.x"
+      node-version: "20.19.1"
   test:
     name: Test
     uses: actions/reusable-workflows/.github/workflows/basic-validation.yml@2826fb8353263a138210fc017301ce5767a9c0d4
     with:
-      node-version: "20.x"
+      node-version: "20.19.1"
