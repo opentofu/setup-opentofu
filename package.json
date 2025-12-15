@@ -19,7 +19,7 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "2.0.1",
     "@actions/exec": "2.0.0",
     "@actions/io": "2.0.0",
     "@actions/tool-cache": "2.0.2",
