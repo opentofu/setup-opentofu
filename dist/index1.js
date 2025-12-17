@@ -25899,7 +25899,8 @@ module.exports = {
  *
  * @example
  * // Instantiate a new listener
- * const listener = new OutputListener();
+ * // stream is used to write the data before waiting for the listener to complete
+ * const listener = new OutputListener(stream);
  * // Register listener against STDOUT stream
  * await exec.exec('ls', ['-ltr'], {
  *  listeners: {
@@ -25910,12 +25911,14 @@ module.exports = {
  * console.log(listener.contents);
  */
 class OutputListener {
-  constructor () {
+  constructor (stream) {
     this._buff = [];
+    this._stream = stream;
   }
 
   get listener () {
     const listen = function listen (data) {
+      this._stream.write(data);
       this._buff.push(data);
     };
     return listen.bind(this);
@@ -27889,8 +27892,8 @@ async function checkTofu () {
   await checkTofu();
 
   // Create listeners to receive output (in memory) as well
-  const stdout = new OutputListener();
-  const stderr = new OutputListener();
+  const stdout = new OutputListener(process.stdout);
+  const stderr = new OutputListener(process.stderr);
   const listeners = {
     stdout: stdout.listener,
     stderr: stderr.listener
@@ -27904,10 +27907,6 @@ async function checkTofu () {
     silent: true // don't print "[command...]" into stdout: https://github.com/actions/toolkit/issues/649
   };
   const exitCode = await exec(pathToCLI, args, options);
-
-  // Pass-through stdout/err as `exec` won't due to `silent: true` option
-  process.stdout.write(stdout.contents);
-  process.stderr.write(stderr.contents);
 
   // Set outputs, result, exitcode, and stderr
   core.setOutput('stdout', stdout.contents);

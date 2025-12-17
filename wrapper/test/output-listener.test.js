@@ -4,10 +4,10 @@
  */
 
 const OutputListener = require('../lib/output-listener');
-
+const { PassThrough } = require('stream');
 describe('output-listener', () => {
-  it('receives and exposes data', () => {
-    const listener = new OutputListener();
+  it('receives and exposes data', () => {  
+    const listener = new OutputListener(new PassThrough());
     const listen = listener.listener;
     listen(Buffer.from('foo'));
     listen(Buffer.from('bar'));
