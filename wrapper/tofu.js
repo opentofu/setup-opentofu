@@ -22,8 +22,8 @@ async function checkTofu () {
   await checkTofu();
 
   // Create listeners to receive output (in memory) as well
-  const stdout = new OutputListener();
-  const stderr = new OutputListener();
+  const stdout = new OutputListener(process.stdout);
+  const stderr = new OutputListener(process.stderr);
   const listeners = {
     stdout: stdout.listener,
     stderr: stderr.listener
@@ -37,10 +37,6 @@ async function checkTofu () {
     silent: true // don't print "[command...]" into stdout: https://github.com/actions/toolkit/issues/649
   };
   const exitCode = await exec(pathToCLI, args, options);
-
-  // Pass-through stdout/err as `exec` won't due to `silent: true` option
-  process.stdout.write(stdout.contents);
-  process.stderr.write(stderr.contents);
 
   // Set outputs, result, exitcode, and stderr
   core.setOutput('stdout', stdout.contents);
