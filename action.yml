@@ -20,6 +20,10 @@ inputs:
     description: 'Whether or not to install a wrapper to wrap subsequent calls of the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
     default: 'true'
     required: false
+  cache:
+    description: 'Whether to use GitHub Actions tool-cache to store and reuse downloaded OpenTofu binaries. Defaults to `false`.'
+    default: 'false'
+    required: false
   github_token:
     description: 'API token for GitHub to increase the rate limit. Defaults to the GITHUB_TOKEN environment variable unless running on Forgejo/Gitea.'
     default: ''
