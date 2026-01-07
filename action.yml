@@ -21,7 +21,7 @@ inputs:
     default: 'true'
     required: false
   cache:
-    description: 'Whether to use GitHub Actions tool cache to store and reuse downloaded OpenTofu binaries, reducing installation time on subsequent workflow runs. Defaults to `false`.'
+    description: 'Whether to use GitHub Actions tool-cache to store and reuse downloaded OpenTofu binaries. Defaults to `false`.'
     default: 'false'
     required: false
   github_token:
