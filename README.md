@@ -67,6 +67,15 @@ steps:
     tofu_wrapper: false
 ```
 
+Caching can be enabled to reduce download time on subsequent workflow runs by storing the OpenTofu binary using the GitHub Actions [tool-cache](https://github.com/actions/toolkit/tree/main/packages/tool-cache). Note that this feature is primarily useful for self-hosted runners that support toolchain caching, since GitHub-hosted runners are ephemeral and do not persist the tool cache between runs:
+
+```yaml
+steps:
+- uses: opentofu/setup-opentofu@v1
+  with:
+    cache: true
+```
+
 Subsequent steps can access outputs when the wrapper script is installed:
 
 ```yaml
@@ -264,6 +273,7 @@ The action supports the following inputs:
 - `tofu_wrapper` - (optional) Whether to install a wrapper to wrap subsequent calls of
   the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs
   named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.
+- `cache` - (optional) Whether to use GitHub Actions tool-cache to store and reuse downloaded OpenTofu binaries. Defaults to `false`.
 - `github_token` - (optional) Override the GitHub token read from the environment variable. Defaults to the value of the `GITHUB_TOKEN` environment variable unless running on Forgejo or Gitea.
 
 ## Outputs
