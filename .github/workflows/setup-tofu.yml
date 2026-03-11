@@ -23,7 +23,7 @@ jobs:
         tofu-version-files: ['./.github/workflows/data/local/.opentofu-version']
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup OpenTofu - ${{ matrix['tofu-version-files'] }}
       uses: ./
@@ -43,7 +43,7 @@ jobs:
         tofu-wrapper: [true, false]
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup OpenTofu - ${{ matrix['tofu-versions'] }}
       uses: ./
@@ -66,7 +66,7 @@ jobs:
         tofu-wrapper: [true, false]
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup OpenTofu
       uses: ./
@@ -103,7 +103,7 @@ jobs:
         working-directory: ./.github/workflows/data/local
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup OpenTofu
       uses: ./
@@ -133,7 +133,7 @@ jobs:
       TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup OpenTofu
         uses: ./
@@ -162,7 +162,7 @@ jobs:
       TF_CLOUD_API_TOKEN: 'XXXXXXXXXXXXXX.atlasv1.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup OpenTofu
         uses: ./
@@ -190,7 +190,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup OpenTofu
         uses: ./
