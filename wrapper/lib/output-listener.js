@@ -20,7 +20,7 @@
  * // Log out STDOUT contents
  * console.log(listener.contents);
  */
-class OutputListener {
+export default class OutputListener {
   constructor (stream) {
     this._buff = [];
     this._stream = stream;
@@ -35,10 +35,6 @@ class OutputListener {
   }
 
   get contents () {
-    return this._buff
-      .map(chunk => chunk.toString())
-      .join('');
+    return this._buff.map((chunk) => chunk.toString()).join('');
   }
 }
-
-module.exports = OutputListener;

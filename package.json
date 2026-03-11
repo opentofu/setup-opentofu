@@ -1,39 +1,41 @@
 {
-  "name": "setup-opentofu",
-  "version": "1.0.1",
-  "description": "Setup OpenTofu CLI for GitHub Actions",
-  "license": "MPL-2.0",
-  "publisher": "OpenTofu",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/opentofu/setup-opentofu.git"
-  },
-  "scripts": {
-    "test": "semistandard --env jest && jest --coverage",
-    "lint": "semistandard --env jest --fix",
-    "build": "ncc build wrapper/tofu.js --out wrapper/dist && ncc build index.js --out dist",
-    "prepare": "husky install",
-    "format-check": "echo \"unimplemented for actions/reusable-workflows basic-validation\""
-  },
-  "keywords": [],
-  "author": "",
-  "dependencies": {
-    "@actions/core": "2.0.2",
-    "@actions/exec": "2.0.0",
-    "@actions/io": "2.0.0",
-    "@actions/tool-cache": "2.0.2",
-    "semver": "7.7.3"
-  },
-  "devDependencies": {
-    "@vercel/ncc": "0.38.4",
-    "husky": "9.1.7",
-    "jest": "30.2.0",
-    "semistandard": "17.0.0"
-  },
-  "semistandard": {
-    "ignore": [
-      "**/dist/**"
-    ]
-  }
+	"name": "setup-opentofu",
+	"version": "1.0.1",
+	"description": "Setup OpenTofu CLI for GitHub Actions",
+	"type": "module",
+	"license": "MPL-2.0",
+	"publisher": "OpenTofu",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/opentofu/setup-opentofu.git"
+	},
+	"scripts": {
+		"test": "semistandard --env jest && NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+		"lint": "semistandard --env jest --fix",
+		"build": "ncc build wrapper/tofu.js --out wrapper/dist && ncc build index.js --out dist",
+		"prepare": "husky install",
+		"format-check": "echo \"unimplemented for actions/reusable-workflows basic-validation\""
+	},
+	"keywords": [],
+	"author": "",
+	"dependencies": {
+		"@actions/core": "^3.0.0",
+		"@actions/exec": "^3.0.0",
+		"@actions/http-client": "^4.0.0",
+		"@actions/io": "^3.0.2",
+		"@actions/tool-cache": "^4.0.0",
+		"semver": "^7.7.4"
+	},
+	"devDependencies": {
+		"@vercel/ncc": "0.38.4",
+		"husky": "9.1.7",
+		"jest": "^30.3.0",
+		"semistandard": "17.0.0"
+	},
+	"semistandard": {
+		"ignore": [
+			"**/dist/**"
+		]
+	}
 }
