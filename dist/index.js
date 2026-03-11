@@ -34319,11 +34319,7 @@ function _unique(values) {
 class Build {
   constructor (version, name) {
     this.name = name;
-    this.url =
-      'https://github.com/opentofu/opentofu/releases/download/v' +
-      version +
-      '/' +
-      name;
+    this.url = `https://github.com/opentofu/opentofu/releases/download/v${version}/${name}`;
   }
 }
 
