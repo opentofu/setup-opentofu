@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 

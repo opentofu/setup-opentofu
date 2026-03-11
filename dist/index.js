@@ -34308,6 +34308,7 @@ function _unique(values) {
 //# sourceMappingURL=tool-cache.js.map
 ;// CONCATENATED MODULE: ./lib/releases.js
 /**
+ * Copyright (c) HashiCorp, Inc.
  * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
@@ -34670,6 +34671,7 @@ async function run () {
 ;// CONCATENATED MODULE: ./index.js
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 

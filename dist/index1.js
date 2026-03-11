@@ -30778,6 +30778,7 @@ function getIDToken(aud) {
 ;// CONCATENATED MODULE: ./wrapper/lib/output-listener.js
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
@@ -30820,6 +30821,7 @@ class OutputListener {
 ;// CONCATENATED MODULE: ./wrapper/lib/tofu-bin.js
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
@@ -30838,6 +30840,7 @@ const tofuBin = (() => {
 ;// CONCATENATED MODULE: ./wrapper/tofu.js
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
