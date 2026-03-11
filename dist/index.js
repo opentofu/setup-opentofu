@@ -34617,19 +34617,19 @@ async function run () {
 
     core_debug(`Finding releases for OpenTofu version ${version}`);
     const release = await getRelease(version, githubToken);
-    const platform = mapOS(osPlatform);
-    const arch = mapArch(osArch);
-    const build = release.getBuild(platform, arch);
+    const buildPlatform = mapOS(osPlatform);
+    const buildArch = mapArch(osArch);
+    const build = release.getBuild(buildPlatform, buildArch);
     if (!build) {
       throw new Error(
-        `OpenTofu version ${version} not available for ${platform} and ${arch}`
+        `OpenTofu version ${version} not available for ${buildPlatform} and ${buildArch}`
       );
     }
 
     // Download requested version if not cached
     let pathToCLI;
     if (useCache) {
-      const cachedPath = find('tofu', release.version, arch);
+      const cachedPath = find('tofu', release.version, buildArch);
       if (cachedPath) {
         core_debug(`Using cached OpenTofu version ${release.version} from ${cachedPath}`);
         pathToCLI = cachedPath;
@@ -34637,7 +34637,7 @@ async function run () {
         core_debug(`OpenTofu version ${release.version} not found in cache, downloading...`);
         const extractedPath = await downloadAndExtractCLI(build.url);
         core_debug(`Caching OpenTofu version ${release.version} to tool cache`);
-        pathToCLI = await cacheDir(extractedPath, 'tofu', release.version, arch);
+        pathToCLI = await cacheDir(extractedPath, 'tofu', release.version, buildArch);
       }
     } else {
       pathToCLI = await downloadAndExtractCLI(build.url);
