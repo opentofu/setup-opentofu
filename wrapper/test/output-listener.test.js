@@ -1,10 +1,12 @@
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const OutputListener = require('../lib/output-listener');
-const { PassThrough } = require('stream');
+import OutputListener from '../lib/output-listener.js';
+import { PassThrough } from 'stream';
+
 describe('output-listener', () => {
   it('receives and exposes data', () => {
     const stream = new PassThrough();

@@ -1,16 +1,17 @@
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const core = require('@actions/core');
+import { setFailed } from '@actions/core';
 
-const setup = require('./lib/setup-tofu');
+import setup from './lib/setup-tofu.js';
 
 (async () => {
   try {
     await setup();
   } catch (error) {
-    core.setFailed(error.message);
+    setFailed(error.message);
   }
 })();

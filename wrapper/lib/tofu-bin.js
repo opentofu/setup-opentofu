@@ -1,14 +1,17 @@
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const os = require('os');
-const path = require('path');
+import os from 'os';
+import path from 'path';
 
-module.exports = (() => {
+const tofuBin = (() => {
   // If we're on Windows, then the executable ends with .exe
   const exeSuffix = os.platform().startsWith('win') ? '.exe' : '';
 
   return [process.env.TOFU_CLI_PATH, `tofu-bin${exeSuffix}`].join(path.sep);
 })();
+
+export default tofuBin;

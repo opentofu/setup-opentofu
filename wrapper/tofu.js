@@ -1,20 +1,21 @@
 #!/usr/bin/env node
 /**
  * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) OpenTofu
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const io = require('@actions/io');
-const core = require('@actions/core');
-const { exec } = require('@actions/exec');
+import { which } from '@actions/io';
+import { setOutput, setFailed } from '@actions/core';
+import { exec } from '@actions/exec';
 
-const OutputListener = require('./lib/output-listener');
-const pathToCLI = require('./lib/tofu-bin');
+import OutputListener from './lib/output-listener.js';
+import pathToCLI from './lib/tofu-bin.js';
 
 async function checkTofu () {
   // Setting check to `true` will cause `which` to throw if tofu isn't found
   const check = true;
-  return io.which(pathToCLI, check);
+  return which(pathToCLI, check);
 }
 
 (async () => {
@@ -39,9 +40,9 @@ async function checkTofu () {
   const exitCode = await exec(pathToCLI, args, options);
 
   // Set outputs, result, exitcode, and stderr
-  core.setOutput('stdout', stdout.contents);
-  core.setOutput('stderr', stderr.contents);
-  core.setOutput('exitcode', exitCode.toString(10));
+  setOutput('stdout', stdout.contents);
+  setOutput('stderr', stderr.contents);
+  setOutput('exitcode', exitCode.toString(10));
 
   if (exitCode === 0 || exitCode === 2) {
     // A exitCode of 0 is considered a success
@@ -52,5 +53,5 @@ async function checkTofu () {
   }
 
   // A non-zero exitCode is considered an error
-  core.setFailed(`OpenTofu exited with code ${exitCode}.`);
+  setFailed(`OpenTofu exited with code ${exitCode}.`);
 })();
