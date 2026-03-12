@@ -6,7 +6,7 @@
 
 const io = require('@actions/io');
 const core = require('@actions/core');
-const { exec } = require('@actions/exec');
+const { spawn } = require('child_process');
 
 const OutputListener = require('./lib/output-listener');
 const pathToCLI = require('./lib/tofu-bin');
@@ -24,19 +24,27 @@ async function checkTofu () {
   // Create listeners to receive output (in memory) as well
   const stdout = new OutputListener(process.stdout);
   const stderr = new OutputListener(process.stderr);
-  const listeners = {
-    stdout: stdout.listener,
-    stderr: stderr.listener
-  };
 
   // Execute tofu and capture output
   const args = process.argv.slice(2);
-  const options = {
-    listeners,
-    ignoreReturnCode: true,
-    silent: true // don't print "[command...]" into stdout: https://github.com/actions/toolkit/issues/649
-  };
-  const exitCode = await exec(pathToCLI, args, options);
+  const child = spawn(pathToCLI, args, { stdio: ['inherit', 'pipe', 'pipe'] });
+
+  // Forward signals to child so tofu can release state locks on cancellation
+  const forwardSigterm = () => { child.kill('SIGTERM'); };
+  const forwardSigint = () => { child.kill('SIGINT'); };
+  process.on('SIGTERM', forwardSigterm);
+  process.on('SIGINT', forwardSigint);
+
+  child.stdout.on('data', stdout.listener);
+  child.stderr.on('data', stderr.listener);
+
+  const exitCode = await new Promise((resolve) => {
+    // code is null when the process is killed by a signal; treat as failure
+    child.on('close', (code) => resolve(code ?? 1));
+  });
+
+  process.removeListener('SIGTERM', forwardSigterm);
+  process.removeListener('SIGINT', forwardSigint);
 
   // Set outputs, result, exitcode, and stderr
   core.setOutput('stdout', stdout.contents);
