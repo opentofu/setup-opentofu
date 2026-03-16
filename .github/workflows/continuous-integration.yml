@@ -17,3 +17,14 @@ jobs:
     uses: actions/reusable-workflows/.github/workflows/basic-validation.yml@2826fb8353263a138210fc017301ce5767a9c0d4
     with:
       node-version: "24.14.0"
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
