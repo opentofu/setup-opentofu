@@ -16,14 +16,14 @@ The default configuration installs the latest version of OpenTofu CLI and instal
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
 ```
 
 A specific version of OpenTofu CLI can be installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
   with:
     tofu_version: 1.6.0
 ```
@@ -32,7 +32,7 @@ You can also specify the version in a file (e.g., `.opentofu-version`):
 
 ```yaml
 steps:
-  - uses: opentofu/setup-opentofu@v1
+  - uses: opentofu/setup-opentofu@v2
     with:
       tofu_version_file: .opentofu-version
 ```
@@ -43,7 +43,7 @@ Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) 
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
   with:
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 ```
@@ -52,7 +52,7 @@ Credentials for Terraform Enterprise (TFE) can be configured:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
   with:
     cli_config_credentials_hostname: 'tofu.example.com'
     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -62,7 +62,7 @@ The wrapper script installation can be skipped by setting the `tofu_wrapper` var
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
   with:
     tofu_wrapper: false
 ```
@@ -71,7 +71,7 @@ Caching can be enabled to reduce download time on subsequent workflow runs by st
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
   with:
     cache: true
 ```
@@ -80,7 +80,7 @@ Subsequent steps can access outputs when the wrapper script is installed:
 
 ```yaml
 steps:
-- uses: opentofu/setup-opentofu@v1
+- uses: opentofu/setup-opentofu@v2
 
 - run: tofu init
 
@@ -107,8 +107,8 @@ defaults:
 permissions:
   pull-requests: write
 steps:
-- uses: actions/checkout@v3
-- uses: opentofu/setup-opentofu@v1
+- uses: actions/checkout@v6
+- uses: opentofu/setup-opentofu@v2
 
 - name: OpenTofu fmt
   id: fmt
@@ -175,8 +175,8 @@ defaults:
 permissions:
   pull-requests: write
 steps:
-- uses: actions/checkout@v3
-- uses: opentofu/setup-opentofu@v1
+- uses: actions/checkout@v6
+- uses: opentofu/setup-opentofu@v2
 
 - name: OpenTofu fmt
   id: fmt
