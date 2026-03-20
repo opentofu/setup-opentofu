@@ -34776,6 +34776,7 @@ async function run () {
     const credentialsHostname = getInput('cli_config_credentials_hostname');
     const credentialsToken = getInput('cli_config_credentials_token');
     const wrapper = getInput('tofu_wrapper') === 'true';
+    const providerAcceptanceTest = getInput('provider_acceptance_test') === 'true';
     const useCache = getInput('cache') === 'true';
     let githubToken = getInput('github_token');
     if (
@@ -34847,6 +34848,16 @@ async function run () {
 
     // Add to path
     addPath(pathToCLI);
+
+    // Set up provider acceptance test environment variables
+    if (providerAcceptanceTest) {
+      const exeSuffix = (0,external_os_namespaceObject.platform)().startsWith('win') ? '.exe' : '';
+      const binaryName = wrapper ? `tofu-bin${exeSuffix}` : `tofu${exeSuffix}`;
+      exportVariable('TF_ACC', '1');
+      exportVariable('TF_ACC_PROVIDER_NAMESPACE', 'hashicorp');
+      exportVariable('TF_ACC_PROVIDER_HOST', 'registry.opentofu.org');
+      exportVariable('TF_ACC_TERRAFORM_PATH', (0,external_path_namespaceObject.join)(pathToCLI, binaryName));
+    }
 
     // Add credentials to file if they are provided
     if (credentialsHostname && credentialsToken) {
