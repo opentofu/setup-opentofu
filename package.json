@@ -11,7 +11,7 @@
 		"url": "https://github.com/opentofu/setup-opentofu.git"
 	},
 	"scripts": {
-		"test": "semistandard --env jest && node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
+		"test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
 		"lint": "semistandard --env jest --fix",
 		"build": "ncc build wrapper/tofu.js --out wrapper/dist && ncc build index.js --out dist",
 		"prepare": "husky install",
