@@ -34621,6 +34621,21 @@ async function getRelease (
 
 
 
+;// CONCATENATED MODULE: external "stream/promises"
+const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("stream/promises");
+;// CONCATENATED MODULE: ./lib/util.js
+
+
+
+
+async function fileSHA256 (filePath) {
+  const hash = (0,external_crypto_namespaceObject.createHash)('sha256');
+  const fileStream = (0,external_fs_namespaceObject.createReadStream)(filePath);
+
+  await (0,promises_namespaceObject.pipeline)(fileStream, hash);
+  return hash.digest('hex');
+}
+
 ;// CONCATENATED MODULE: ./lib/setup-tofu.js
 /**
  * Copyright (c) HashiCorp, Inc.
@@ -34635,6 +34650,7 @@ async function getRelease (
 
 
 // External
+
 
 
 
@@ -34663,7 +34679,7 @@ function mapOS (os) {
   return os;
 }
 
-async function downloadAndExtractCLI (url) {
+async function downloadAndExtractCLI (url, checksums) {
   core_debug(`Downloading OpenTofu CLI from ${url}`);
   let pathToCLIZip;
   try {
@@ -34671,6 +34687,14 @@ async function downloadAndExtractCLI (url) {
   } catch (error) {
     const cause = getErrorMessage(error);
     throw new Error(`Failed to download OpenTofu from ${url}: ${cause}`);
+  }
+
+  if (checksums.length > 0) {
+    const checksum = await fileSHA256(pathToCLIZip);
+
+    if (!checksums.includes(checksum)) {
+      throw new Error(`Failed to download OpenTofu from ${url}: Invalid checksum ${checksum}`);
+    }
   }
 
   if (!pathToCLIZip) {
@@ -34777,6 +34801,7 @@ async function run () {
     const credentialsToken = getInput('cli_config_credentials_token');
     const wrapper = getInput('tofu_wrapper') === 'true';
     const useCache = getInput('cache') === 'true';
+    const checksums = getMultilineInput('checksums');
     let githubToken = getInput('github_token');
     if (
       githubToken === '' &&
@@ -34832,12 +34857,12 @@ async function run () {
         pathToCLI = cachedPath;
       } else {
         core_debug(`OpenTofu version ${release.version} not found in cache, downloading...`);
-        const extractedPath = await downloadAndExtractCLI(build.url);
+        const extractedPath = await downloadAndExtractCLI(build.url, checksums);
         core_debug(`Caching OpenTofu version ${release.version} to tool cache`);
         pathToCLI = await cacheDir(extractedPath, 'tofu', release.version, buildArch);
       }
     } else {
-      pathToCLI = await downloadAndExtractCLI(build.url);
+      pathToCLI = await downloadAndExtractCLI(build.url, checksums);
     }
 
     // Install our wrapper
