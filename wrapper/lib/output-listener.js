@@ -38,4 +38,24 @@ export default class OutputListener {
   get contents () {
     return this._buff.map((chunk) => chunk.toString()).join('');
   }
+
+  get planAddCount () {
+    const match = this.contents.match(/Plan: (\d+) to add/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  get planChangeCount () {
+    const match = this.contents.match(/(\d+) to change/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  get planDestroyCount () {
+    const match = this.contents.match(/(\d+) to destroy/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  get planImportCount () {
+    const match = this.contents.match(/(\d+) to import/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
 }
