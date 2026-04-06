@@ -34699,7 +34699,7 @@ async function downloadAndExtractCLI (url, checksums) {
     }
 
     if (!checksums.includes(checksum)) {
-      throw new Error(`Failed to validate OpenTofu CLI zip with checksum: ${checksum}`);
+      throw new Error(`Failed to validate OpenTofu CLI zip checksum. Received: ${checksum}. Valid checksums: ${checksums.join(', ')}`);
     }
   }
 
