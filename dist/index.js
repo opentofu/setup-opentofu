@@ -34624,6 +34624,11 @@ async function getRelease (
 ;// CONCATENATED MODULE: external "stream/promises"
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("stream/promises");
 ;// CONCATENATED MODULE: ./lib/util.js
+/**
+ * Copyright (c) OpenTofu
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 
 
 
