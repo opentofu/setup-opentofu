@@ -76,14 +76,15 @@ steps:
     cache: true
 ```
 
-Validation can be enabled to check the downloaded OpenTofu CLI SH256 hash against a newline-delimited list of checksums:
+Validation can be enabled to check the downloaded OpenTofu CLI SHA256 hash against a newline-delimited list of checksums:
 
 ```yaml
 steps:
 - uses: opentofu/setup-opentofu@v2
   with:
-    checksums: '933b060ab1cf05b106e94af1d370fd14b3006a6845495a67c68734269cc705ad
-    d3d29f51e75a701fc7cf67c0644a8c883a85f36cf1621461988baffd88e7f361'
+    checksums: |
+    933b060ab1cf05b106e94af1d370fd14b3006a6845495a67c68734269cc705ad
+    d3d29f51e75a701fc7cf67c0644a8c883a85f36cf1621461988baffd88e7f361
 ```
 
 Subsequent steps can access outputs when the wrapper script is installed:
