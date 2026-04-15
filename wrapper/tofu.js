@@ -44,14 +44,13 @@ async function checkTofu () {
   setOutput('stderr', stderr.contents);
   setOutput('exitcode', exitCode.toString(10));
 
-  if (exitCode === 0 || exitCode === 2) {
-    // A exitCode of 0 is considered a success
-    // An exitCode of 2 may be returned when the '-detailed-exitcode' option
-    // is passed to plan. This denotes Success with non-empty
-    // diff (changes present).
+  if (exitCode === 0) {
     return;
   }
 
-  // A non-zero exitCode is considered an error
+  // Any non-zero exitCode is treated as a failure, including exitCode 2 from
+  // `plan -detailed-exitcode` (success with a non-empty diff). Previously 2 was
+  // treated as success, but that hid the signal users opt into `-detailed-exitcode`
+  // to receive.
   setFailed(`OpenTofu exited with code ${exitCode}.`);
 })();
