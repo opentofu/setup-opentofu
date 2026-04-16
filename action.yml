@@ -32,6 +32,9 @@ inputs:
     description: 'Whether to automatically set environment variables for running OpenTofu provider acceptance tests (TF_ACC, TF_ACC_PROVIDER_NAMESPACE, TF_ACC_PROVIDER_HOST, TF_ACC_TERRAFORM_PATH). Defaults to `false`.'
     default: 'false'
     required: false
+  checksums:
+    description: Newline-delimited list of valid checksums (SHA256 hashes) for the downloaded OpenTofu binary. When set, the action will verify that the binary matches one of these checksums before proceeding.
+    required: false
 outputs:
   stdout:
     description: 'The STDOUT stream of the call to the `tofu` binary.'
