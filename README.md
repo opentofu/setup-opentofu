@@ -76,14 +76,14 @@ steps:
     cache: true
 ```
 
-Provider acceptance test environment variables can be configured automatically by setting `provider_acceptance_test` to `true`. This exports `TF_ACC`, `TF_ACC_PROVIDER_NAMESPACE`, `TF_ACC_PROVIDER_HOST`, and `TF_ACC_TERRAFORM_PATH` so you don't need to set them manually:
+Provider acceptance test environment variables can be configured automatically by setting `provider_acceptance_tests` to `true`. This exports `TF_ACC`, `TF_ACC_PROVIDER_NAMESPACE`, `TF_ACC_PROVIDER_HOST`, and `TF_ACC_TERRAFORM_PATH` so you don't need to set them manually:
 
 ```yaml
 steps:
 - uses: opentofu/setup-opentofu@v2
   with:
     tofu_wrapper: false
-    provider_acceptance_test: true
+    provider_acceptance_tests: true
 - run: go mod download
 - run: go test -v -cover ./...
   timeout-minutes: 10
@@ -298,7 +298,7 @@ The action supports the following inputs:
   the `tofu` binary and expose its STDOUT, STDERR, and exit code as outputs
   named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.
 - `cache` - (optional) Whether to use GitHub Actions tool-cache to store and reuse downloaded OpenTofu binaries. Defaults to `false`.
-- `provider_acceptance_test` - (optional) Whether to automatically set environment variables for running
+- `provider_acceptance_tests` - (optional) Whether to automatically set environment variables for running
   OpenTofu provider acceptance tests. When set to `true`, the following environment variables are exported:
   `TF_ACC=1`, `TF_ACC_PROVIDER_NAMESPACE=hashicorp`, `TF_ACC_PROVIDER_HOST=registry.opentofu.org`, and
   `TF_ACC_TERRAFORM_PATH=<path to tofu binary>`. Defaults to `false`.

@@ -34811,7 +34811,7 @@ async function run () {
     const credentialsHostname = getInput('cli_config_credentials_hostname');
     const credentialsToken = getInput('cli_config_credentials_token');
     const wrapper = getInput('tofu_wrapper') === 'true';
-    const providerAcceptanceTest = getInput('provider_acceptance_test') === 'true';
+    const providerAcceptanceTest = getInput('provider_acceptance_tests') === 'true';
     const useCache = getInput('cache') === 'true';
     const checksums = getMultilineInput('checksums');
     let githubToken = getInput('github_token');
