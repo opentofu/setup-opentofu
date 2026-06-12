@@ -33,7 +33,7 @@ inputs:
     default: 'false'
     required: false
   checksums:
-    description: Newline-delimited list of valid checksums (SHA256 hashes) for the downloaded OpenTofu binary. When set, the action will verify that the binary matches one of these checksums before proceeding.
+    description: Newline-delimited list of valid checksums (SHA256 hashes) for the downloaded OpenTofu binary. When set, the action verifies the binary matches one of these checksums before proceeding. When unset, the action verifies the binary against the SHA-256 checksum published in the release's SHA256SUMS file by default.
     required: false
 outputs:
   stdout:
