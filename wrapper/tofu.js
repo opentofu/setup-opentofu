@@ -12,6 +12,11 @@ import { exec } from '@actions/exec';
 import OutputListener from './lib/output-listener.js';
 import pathToCLI from './lib/tofu-bin.js';
 
+const ignoreExitCodes = (process.env.TOFU_WRAPPER_IGNORE_EXIT_CODES || '')
+  .split(',')
+  .map((c) => parseInt(c.trim(), 10))
+  .filter((c) => !isNaN(c));
+
 async function checkTofu () {
   // Setting check to `true` will cause `which` to throw if tofu isn't found
   const check = true;
@@ -44,7 +49,7 @@ async function checkTofu () {
   setOutput('stderr', stderr.contents);
   setOutput('exitcode', exitCode.toString(10));
 
-  if (exitCode === 0 || exitCode === 2) {
+  if (exitCode === 0 || ignoreExitCodes.includes(exitCode)) {
     // A exitCode of 0 is considered a success
     // An exitCode of 2 may be returned when the '-detailed-exitcode' option
     // is passed to plan. This denotes Success with non-empty
