@@ -25,7 +25,7 @@
 		"@actions/http-client": "4.0.1",
 		"@actions/io": "^3.0.2",
 		"@actions/tool-cache": "^4.0.0",
-		"semver": "^7.8.1"
+		"semver": "^7.8.3"
 	},
 	"devDependencies": {
 		"@vercel/ncc": "0.38.4",
