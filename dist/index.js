@@ -34644,7 +34644,7 @@ async function fetchSHA256SUMS (version) {
 
   if (resp.message.statusCode !== HttpCodes.OK) {
     throw new Error(
-      'failed fetching SHA256SUMS (' + resp.message.statusCode + ')'
+      `failed fetching SHA256SUMS for ${url} (${resp.message.statusCode})`
     );
   }
 
