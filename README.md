@@ -89,7 +89,9 @@ steps:
   timeout-minutes: 10
 ```
 
-Validation can be enabled to check the downloaded OpenTofu CLI SHA256 hash against a newline-delimited list of checksums:
+By default, the action verifies the downloaded OpenTofu CLI ZIP against the SHA-256 checksum published in the release's `SHA256SUMS` file, so the default install path is verified out of the box. Verification is skipped (with a warning) only when the published checksum cannot be retrieved.
+
+To pin the expected hashes yourself instead, pass a newline-delimited list of checksums. When set, this list takes precedence over the published `SHA256SUMS`:
 
 ```yaml
 steps:
@@ -303,7 +305,7 @@ The action supports the following inputs:
   `TF_ACC=1`, `TF_ACC_PROVIDER_NAMESPACE=hashicorp`, `TF_ACC_PROVIDER_HOST=registry.opentofu.org`, and
   `TF_ACC_TERRAFORM_PATH=<path to tofu binary>`. Defaults to `false`.
 - `github_token` - (optional) Override the GitHub token read from the environment variable. Defaults to the value of the `GITHUB_TOKEN` environment variable unless running on Forgejo or Gitea.
-- `checksums` - (optional) A newline-delimited list of valid checksums (SHA256) for the downloaded OpenTofu CLI ZIP. When set, the action will verify the ZIP matches one of the checksums before proceeding. Defaults to `[]`
+- `checksums` - (optional) A newline-delimited list of valid checksums (SHA256) for the downloaded OpenTofu CLI ZIP. When set, the action will verify the ZIP matches one of the checksums before proceeding. When unset, the action verifies the ZIP against the SHA-256 checksum published in the release's `SHA256SUMS` file by default. Defaults to `[]`
 
 ## Outputs
 

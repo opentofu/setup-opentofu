@@ -34638,6 +34638,86 @@ async function fetchReleases (githubToken) {
   return versions.map((releaseMeta) => new Release(releaseMeta));
 }
 
+/**
+ * Fetches the raw SHA256SUMS file published alongside an OpenTofu release.
+ *
+ * @param {string} version: Release version (without the leading `v`).
+ * @return {string} Raw SHA256SUMS file body.
+ */
+async function fetchSHA256SUMS (version) {
+  const userAgent = 'opentofu/setup-opentofu';
+
+  const http = new lib_HttpClient(userAgent);
+
+  const url = `https://github.com/opentofu/opentofu/releases/download/v${version}/tofu_${version}_SHA256SUMS`;
+
+  let resp;
+  try {
+    resp = await http.get(url);
+  } catch (error) {
+    const cause = getErrorMessage(error);
+    throw new Error(`Failed to fetch SHA256SUMS from ${url}: ${cause}`);
+  }
+
+  if (resp.message.statusCode !== HttpCodes.OK) {
+    throw new Error(
+      `failed fetching SHA256SUMS for ${url} (${resp.message.statusCode})`
+    );
+  }
+
+  return resp.readBody();
+}
+
+/**
+ * Parses a SHA256SUMS file body and returns the checksum for a given file name.
+ *
+ * Each line follows the `sha256sum` format: a lowercase hex digest, whitespace,
+ * then the file name (binary-mode lines prefix the name with `*`).
+ *
+ * @param {string} body: Raw SHA256SUMS file body.
+ * @param {string} fileName: Asset file name to look up.
+ * @return {string|null} Lowercase hex SHA-256 checksum, or null when not found.
+ */
+function parseChecksum (body, fileName) {
+  for (const line of body.split('\n')) {
+    const trimmed = line.trim();
+    if (trimmed === '') {
+      continue;
+    }
+
+    const separatorIndex = trimmed.search(/\s/);
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const checksum = trimmed.slice(0, separatorIndex);
+    const name = trimmed.slice(separatorIndex).trim().replace(/^\*/, '');
+    if (name === fileName) {
+      return checksum.toLowerCase();
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolves the published SHA-256 checksum for a release asset by fetching the
+ * release's SHA256SUMS file and looking up the asset's file name.
+ *
+ * @param {string} version: Release version (without the leading `v`).
+ * @param {string} fileName: Asset file name to look up.
+ * @param {function} fetchSumsFn: Optional fetcher for the SHA256SUMS body (for testing).
+ * @return {string|null} Lowercase hex SHA-256 checksum, or null when not found.
+ */
+async function getDownloadChecksum (
+  version,
+  fileName,
+  fetchSumsFn = fetchSHA256SUMS
+) {
+  const body = await fetchSumsFn(version);
+  return parseChecksum(body, fileName);
+}
+
 async function findLatestVersion (versions) {
   return versions
     .filter((v) => node_modules_semver.prerelease(v) === null)
@@ -34820,6 +34900,42 @@ async function downloadAndExtractCLI (url, checksums) {
   return pathToCLI;
 }
 
+// Resolve the checksums to validate the downloaded archive against. An explicit
+// `checksums` input always wins. Otherwise the action falls back to the SHA-256
+// checksum published in the release's SHA256SUMS file, so the default install
+// path is verified rather than left unchecked. Verification is skipped (with a
+// warning) only when no published checksum can be retrieved.
+async function resolveChecksums (checksums, version, fileName) {
+  if (checksums.length > 0) {
+    return checksums;
+  }
+
+  core_debug(
+    `No checksums input provided; fetching published SHA256SUMS for ${fileName}`
+  );
+
+  let publishedChecksum;
+  try {
+    publishedChecksum = await getDownloadChecksum(version, fileName);
+  } catch (error) {
+    warning(
+      `Failed to fetch published SHA256SUMS for OpenTofu ${version}: ${getErrorMessage(
+        error
+      )}. Proceeding without checksum verification.`
+    );
+    return [];
+  }
+
+  if (!publishedChecksum) {
+    warning(
+      `Could not find a published SHA256 checksum for ${fileName}. Proceeding without checksum verification.`
+    );
+    return [];
+  }
+
+  return [publishedChecksum];
+}
+
 async function installWrapper (pathToCLI) {
   let source, target;
 
@@ -34950,12 +35066,14 @@ async function run () {
         pathToCLI = cachedPath;
       } else {
         core_debug(`OpenTofu version ${release.version} not found in cache, downloading...`);
-        const extractedPath = await downloadAndExtractCLI(build.url, checksums);
+        const effectiveChecksums = await resolveChecksums(checksums, release.version, build.name);
+        const extractedPath = await downloadAndExtractCLI(build.url, effectiveChecksums);
         core_debug(`Caching OpenTofu version ${release.version} to tool cache`);
         pathToCLI = await cacheDir(extractedPath, 'tofu', release.version, buildArch);
       }
     } else {
-      pathToCLI = await downloadAndExtractCLI(build.url, checksums);
+      const effectiveChecksums = await resolveChecksums(checksums, release.version, build.name);
+      pathToCLI = await downloadAndExtractCLI(build.url, effectiveChecksums);
     }
 
     // Install our wrapper
