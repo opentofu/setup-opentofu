@@ -1,6 +1,6 @@
 {
 	"name": "setup-opentofu",
-	"version": "1.0.1",
+	"version": "2.0.2",
 	"description": "Setup OpenTofu CLI for GitHub Actions",
 	"type": "module",
 	"license": "MPL-2.0",
