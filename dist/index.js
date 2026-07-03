@@ -35234,9 +35234,13 @@ async function run () {
       try {
         core_debug(`Reading OpenTofu version from file: ${versionFile}`);
         const fileVersion = await external_fs_namespaceObject.promises.readFile(versionFile, 'utf8');
-        const trimmedVersion = fileVersion.trim();
-        if (trimmedVersion) {
-          version = trimmedVersion;
+        // .tool-versions (asdf format): use the version from the `opentofu <version>`
+        // line and ignore other tool entries. Otherwise (e.g. a single-line
+        // `.opentofu-version` file): use the whole trimmed file content.
+        const asdfMatch = fileVersion.match(/^\s*opentofu\s+([^\s#]+)/m);
+        const parsedVersion = asdfMatch ? asdfMatch[1] : fileVersion.trim();
+        if (parsedVersion) {
+          version = parsedVersion;
           core_debug(`Using version from file: ${version}`);
         } else {
           warning(

@@ -37,6 +37,11 @@ steps:
       tofu_version_file: .opentofu-version
 ```
 
+`tofu_version_file` accepts two formats:
+
+- A single-line file containing just the version (e.g., `.opentofu-version` with `1.9.0`).
+- An asdf-format `.tool-versions` file containing an `opentofu <version>` line. Other tool entries in the same file are ignored.
+
 Supported version syntax is the same as for the `tofu_version` input. If both `tofu_version` and `tofu_version_file` are provided, the version number in the file takes precedence.
 
 Credentials for Terraform Cloud ([app.terraform.io](https://app.terraform.io/)) can be configured:
