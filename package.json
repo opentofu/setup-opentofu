@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@vercel/ncc": "0.45.0",
 		"husky": "9.1.7",
-		"jest": "^30.4.2",
+		"jest": "^30.5.0",
 		"semistandard": "17.0.0"
 	},
 	"semistandard": {
