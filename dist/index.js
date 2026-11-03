@@ -35160,6 +35160,7 @@ function getErrorDetail (error) {
 
 
 
+
 class Build {
   constructor (version, name) {
     this.name = name;
@@ -35184,9 +35185,15 @@ class Release {
 /**
  * Fetches the top 30 releases sorted in desc order.
  *
+ * @param {string} githubToken
+ * @param {object} [options] Optional test helpers (`sleepFn`, `maxAttempts`).
  * @return {Array<Release>} Releases.
  */
-async function fetchReleases (githubToken) {
+async function fetchReleases (githubToken, options = {}) {
+  const sleepFn = options.sleepFn || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
+
+  const maxAttempts = options.maxAttempts || 4;
+
   const userAgent = 'opentofu/setup-opentofu';
 
   const http = new lib_HttpClient(userAgent);
@@ -35198,17 +35205,42 @@ async function fetchReleases (githubToken) {
   };
 
   let resp;
-  try {
-    resp = await http.get(url, headers);
-  } catch (error) {
-    const cause = getErrorMessage(error);
-    throw new Error(`Failed to fetch OpenTofu releases from ${url}: ${cause}`);
-  }
+  for (let attempt = 1; ; attempt++) {
+    try {
+      resp = await http.get(url, headers);
+    } catch (error) {
+      if (attempt >= maxAttempts) {
+        const cause = getErrorMessage(error);
+        throw new Error(`Failed to fetch OpenTofu releases from ${url}: ${cause}`);
+      }
+      const delayMs = 1000 * Math.pow(2, attempt - 1);
+      info(`Retrying releases fetch in ${delayMs}ms (attempt ${attempt}/${maxAttempts})`);
+      await sleepFn(delayMs);
+      continue;
+    }
 
-  if (resp.message.statusCode !== HttpCodes.OK) {
-    throw new Error(
-      'failed fetching releases (' + resp.message.statusCode + ')'
-    );
+    if (resp.message.statusCode === HttpCodes.OK) {
+      break;
+    }
+
+    const statusCode = resp.message.statusCode;
+    const canRetry = statusCode === 429 || statusCode >= 500;
+    if (!canRetry || attempt >= maxAttempts) {
+      throw new Error(
+        'failed fetching releases (' + statusCode + ')'
+      );
+    }
+
+    try {
+      await resp.readBody();
+    } catch (_) {}
+
+    const retryAfter = Number((resp.message.headers || {})['retry-after']);
+    const delayMs = retryAfter > 0
+      ? retryAfter * 1000
+      : 1000 * Math.pow(2, attempt - 1);
+    info(`Retrying releases fetch after HTTP ${statusCode} in ${delayMs}ms (attempt ${attempt}/${maxAttempts})`);
+    await sleepFn(delayMs);
   }
 
   let body;
